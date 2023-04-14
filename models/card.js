@@ -4,13 +4,13 @@ require('mongoose-type-url');
 const cardSchema = new mongoose.Schema({
   name: {
     type: String,
-    require: true,
+    required: true,
     minLength: 2,
     maxLength: 30,
   },
   link: {
     type: mongoose.SchemaTypes.Url,
-    require: true,
+    required: true,
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
@@ -19,7 +19,7 @@ const cardSchema = new mongoose.Schema({
   },
   likes: [{
     type: Array,
-    require: true,
+    required: true,
     default: [],
   }],
   createdAt: {

@@ -16,7 +16,12 @@ app.use((req, res, next) => {
 
   next();
 });
+
 app.use(router);
+
+app.use((req, res) => {
+  res.status(404).send({ message: 'Неправильный адрес' });
+});
 
 app.listen(PORT, () => {
   console.log(`start server at port ${PORT}`);
