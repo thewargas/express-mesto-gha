@@ -1,4 +1,4 @@
-const SUCCESS_CODE = 200;
+const CREATE_CODE = 201;
 const ERROR_CODE = 400;
 const ERROR_NOT_FOUND = 404;
 const ERROR_SERVER = 500;
@@ -11,24 +11,18 @@ const checkId = (data, res) => {
   if (!data) {
     return res.status(ERROR_NOT_FOUND).send(errorMessageNotFoundId);
   }
-  return res.status(SUCCESS_CODE).send(data);
+  return res.send(data);
 };
 
 const selectError = (err, res) => {
-  if (err.name === 'ValidationError') {
+  if (err.name === 'ValidationError' || err.name === 'CastError') {
     return res.status(ERROR_CODE).send(errorMessageIncorrect);
-  }
-  if (err.name === 'CastError') {
-    return res.status(ERROR_CODE).send(errorMessageIncorrect);
-  }
-  if (err.name === 'DocumentNotFoundError') {
-    return res.status(ERROR_NOT_FOUND).send(errorMessageNotFoundId);
   }
   return res.status(ERROR_SERVER).send(errorMessageServer);
 };
 
 module.exports = {
-  SUCCESS_CODE,
+  CREATE_CODE,
   checkId,
   selectError,
 };

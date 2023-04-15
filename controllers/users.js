@@ -1,6 +1,6 @@
 const User = require('../models/user');
 const {
-  SUCCESS_CODE,
+  CREATE_CODE,
   checkId,
   selectError,
 } = require('../utils/validator');
@@ -10,7 +10,7 @@ const createUser = (req, res) => {
 
   User.create({ name, about, avatar })
     .then((newUser) => {
-      res.status(SUCCESS_CODE).send(newUser);
+      res.status(CREATE_CODE).send(newUser);
     })
     .catch((err) => {
       selectError(err, res);
@@ -20,7 +20,7 @@ const createUser = (req, res) => {
 const getAllUsers = (req, res) => {
   User.find({})
     .then((users) => {
-      res.status(SUCCESS_CODE).send(users);
+      res.send(users);
     })
     .catch((err) => {
       selectError(err, res);

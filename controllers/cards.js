@@ -1,16 +1,16 @@
 const Card = require('../models/card');
 const {
-  SUCCESS_CODE,
+  CREATE_CODE,
   checkId,
   selectError,
 } = require('../utils/validator');
 
 const createCard = (req, res) => {
-  const { id } = req.user;
+  const { _id } = req.user;
   const { name, link } = req.body;
-  Card.create({ name, link, owner: id })
+  Card.create({ name, link, owner: _id })
     .then((card) => {
-      res.status(SUCCESS_CODE).send(card);
+      res.status(CREATE_CODE).send(card);
     })
     .catch((err) => {
       selectError(err, res);
@@ -20,8 +20,9 @@ const createCard = (req, res) => {
 const getAllCards = (req, res) => {
   Card.find({})
     .populate('owner')
+    .populate('likes')
     .then((cards) => {
-      res.status(SUCCESS_CODE).send(cards);
+      res.send(cards);
     })
     .catch((err) => {
       selectError(err, res);
@@ -40,7 +41,13 @@ const deleteCard = (req, res) => {
 
 const addLikeCard = (req, res) => {
   const { _id } = req.user;
-  Card.findByIdAndUpdate({ _id: req.params.cardId }, { $addToSet: { likes: _id } }, { new: true })
+  Card.findByIdAndUpdate(
+    { _id: req.params.cardId },
+    { $addToSet: { likes: _id } },
+    { new: true },
+  )
+    .populate('owner')
+    .populate('likes')
     .then((card) => {
       checkId(card, res);
     })
@@ -52,7 +59,13 @@ const addLikeCard = (req, res) => {
 const removeLikeCard = (req, res) => {
   const { _id } = req.user;
 
-  Card.findByIdAndUpdate({ _id: req.params.cardId }, { $pull: { likes: _id } }, { new: true })
+  Card.findByIdAndUpdate(
+    { _id: req.params.cardId },
+    { $pull: { likes: _id } },
+    { new: true },
+  )
+    .populate('owner')
+    .populate('likes')
     .then((card) => {
       checkId(card, res);
     })
